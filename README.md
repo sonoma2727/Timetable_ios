@@ -38,4 +38,3 @@ git push origin v0.1.0
 
 - 兼容 iOS 16+，纯 SwiftUI，无第三方依赖。
 - 账号密码存 Keychain，课表缓存存沙盒文件，开学日期存 UserDefaults，均不上传。
-- 本目录在 Windows 下只能编辑源码，无法编译验证；到 Mac 上如有报错，把错误信息发回来修。
