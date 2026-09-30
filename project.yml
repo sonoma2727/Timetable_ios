@@ -1,0 +1,34 @@
+name: Timetable
+options:
+  bundleIdPrefix: io.github.sonoma2727
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+
+targets:
+  Timetable:
+    type: application
+    platform: iOS
+    sources:
+      - path: Timetable
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.sonoma2727.timetable
+        MARKETING_VERSION: 0.1.0
+        CURRENT_PROJECT_VERSION: 1
+        INFOPLIST_FILE: Timetable/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        SWIFT_VERSION: "5.9"
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: ""
+
+schemes:
+  Timetable:
+    build:
+      targets:
+        Timetable: all
+    run:
+      config: Release
+    archive:
+      config: Release
