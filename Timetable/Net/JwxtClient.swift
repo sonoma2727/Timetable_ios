@@ -29,7 +29,7 @@ final class JwxtClient {
         var request = URLRequest(url: URL(string: Self.loginURL)!)
         request.httpMethod = "POST"
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        request.httpBody = formEncode(bodyParams)
+        request.httpBody = Data(formEncode(bodyParams).utf8)
 
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else {
