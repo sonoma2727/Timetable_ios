@@ -26,10 +26,8 @@ struct Course: Codable, Equatable {
 
     var roomShort: String {
         guard let room = room, !room.isEmpty else { return "" }
-        if let m = RegexUtil.first(#"^([^0-9]*\d{3,4}[室左右]*)"#, in: room) {
-            var t = m[1]
-            if t.hasSuffix("室") { t.removeLast() }
-            return t
+        if let m = RegexUtil.first(#"^([^0-9]*\d{3,4})"#, in: room) {
+            return m[1]
         }
         return room
     }
