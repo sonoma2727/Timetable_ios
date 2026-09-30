@@ -24,6 +24,16 @@ struct Course: Codable, Equatable {
         weeks.isEmpty || weeks.contains(week)
     }
 
+    var roomShort: String {
+        guard let room = room, !room.isEmpty else { return "" }
+        if let m = RegexUtil.first(#"^([^0-9]*\d{3,4}[室左右]*)"#, in: room) {
+            var t = m[1]
+            if t.hasSuffix("室") { t.removeLast() }
+            return t
+        }
+        return room
+    }
+
     enum CodingKeys: String, CodingKey {
         case courseName, teacher, room, day, row, spanRows, periods
         case timeStart, timeEnd, periodLabel, dayName, weekText, weeks

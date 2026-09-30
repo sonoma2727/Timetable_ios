@@ -64,7 +64,9 @@ struct CourseCardView: View {
     }
 
     private var detailLine: String {
-        let parts = [course.room, course.teacher].compactMap { $0 }.filter { !$0.isEmpty }
+        let parts = [course.roomShort.isEmpty ? nil : course.roomShort, course.teacher]
+            .compactMap { $0 }
+            .filter { !$0.isEmpty }
         let joined = parts.joined(separator: " · ")
         return joined.isEmpty ? course.periodLabel : joined
     }
@@ -84,7 +86,7 @@ struct CourseBlockView: View {
                 .lineLimit(3)
                 .minimumScaleFactor(0.5)
                 .foregroundColor(.primary)
-            Text(course.room ?? "")
+            Text(course.roomShort)
                 .font(.system(size: 10))
                 .foregroundColor(.secondary)
                 .lineLimit(2)
