@@ -53,7 +53,9 @@ jobs:
           files: Timetable.ipa
           name: Timetable iOS ${{ github.ref_name }}
           body: |
-            SwiftUI 原生 iOS 端 v0.1.0（iOS 16+）。
+            SwiftUI 原生 iOS 端（iOS 16+）。
+
+            本版修复下拉刷新误报"网络异常"的问题（任务取消防护 + 失败自动重试 + 会话重建前清理旧 Cookie + 错误码提示）。
 
             **此 IPA 未包含签名**，需用以下任一方式重签后安装：
             - 爱思助手：工具箱 → IPA 签名（用你的 Apple ID，7 天有效）

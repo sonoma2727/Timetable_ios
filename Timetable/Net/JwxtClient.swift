@@ -10,11 +10,21 @@ final class JwxtClient {
 
     init() {
         let config = URLSessionConfiguration.default
-        config.timeoutIntervalForRequest = 30
-        config.timeoutIntervalForResource = 60
+        config.timeoutIntervalForRequest = 45
+        config.timeoutIntervalForResource = 120
         config.httpCookieStorage = HTTPCookieStorage.shared
         config.httpShouldSetCookies = true
+        config.urlCache = nil
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+        config.waitsForConnectivity = true
         session = URLSession(configuration: config)
+    }
+
+    func clearCookies() {
+        guard let url = URL(string: Self.base) else { return }
+        for cookie in HTTPCookieStorage.shared.cookies(for: url) ?? [] {
+            HTTPCookieStorage.shared.deleteCookie(cookie)
+        }
     }
 
     func login(account: String, password: String) async throws {
@@ -35,7 +45,7 @@ final class JwxtClient {
         guard let http = response as? HTTPURLResponse else {
             throw AppError.unknown("教务系统响应异常")
         }
-        let text = String(data: data, encoding: .utf8) ?? ""
+        let text = decode(data)
         if !(200...299).contains(http.statusCode) {
             throw AppError.login("教务系统返回 HTTP \(http.statusCode)")
         }
@@ -52,7 +62,7 @@ final class JwxtClient {
         guard let http = response as? HTTPURLResponse else {
             throw AppError.unknown("教务系统响应异常")
         }
-        let text = String(data: data, encoding: .utf8) ?? ""
+        let text = decode(data)
         if !(200...299).contains(http.statusCode) {
             throw AppError.http(http.statusCode)
         }
@@ -60,6 +70,15 @@ final class JwxtClient {
             throw AppError.sessionExpired
         }
         return text
+    }
+
+    private func decode(_ data: Data) -> String {
+        if let s = String(data: data, encoding: .utf8) { return s }
+        let gb18030 = String.Encoding(
+            rawValue: CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)
+        )
+        if let s = String(data: data, encoding: gb18030) { return s }
+        return String(decoding: data, as: UTF8.self)
     }
 
     private func extractError(_ html: String) -> String? {

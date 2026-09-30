@@ -65,8 +65,9 @@ final class AppModel: ObservableObject {
         if !silent {
             loading = true
         }
+        let fetchTask = Task { try await fetchWithRetry() }
         do {
-            let newSchedule = try await fetchWithRetry()
+            let newSchedule = try await fetchTask.value
             Palette.install(courses: newSchedule.courses)
             schedule = newSchedule
             loading = false
@@ -114,12 +115,24 @@ final class AppModel: ObservableObject {
     }
 
     private func fetchWithRetry() async throws -> Schedule {
-        do {
-            return try await fetchOnce()
-        } catch AppError.sessionExpired {
-            sessionAlive = false
-            return try await fetchOnce()
+        var lastError: Error = AppError.unknown("刷新失败")
+        for attempt in 0..<3 {
+            if attempt > 0 {
+                try? await Task.sleep(nanoseconds: UInt64(attempt) * 500_000_000)
+            }
+            do {
+                return try await fetchOnce()
+            } catch AppError.sessionExpired {
+                sessionAlive = false
+                lastError = AppError.sessionExpired
+            } catch let error as URLError {
+                if error.code == .cancelled { throw error }
+                lastError = error
+            } catch {
+                throw error
+            }
         }
+        throw lastError
     }
 
     private func fetchOnce() async throws -> Schedule {
@@ -151,6 +164,7 @@ final class AppModel: ObservableObject {
         guard let creds = keychain.current() else {
             throw AppError.notLoggedIn
         }
+        client.clearCookies()
         try await client.login(account: creds.account, password: creds.password)
         sessionAlive = true
     }
@@ -165,8 +179,11 @@ final class AppModel: ObservableObject {
                 message = appError.errorDescription ?? "出错了，请稍后重试"
             }
         } else if let urlError = error as? URLError {
-            _ = urlError
-            message = "网络异常，请检查网络连接"
+            if urlError.code == .cancelled {
+                loading = false
+                return
+            }
+            message = "网络异常，请检查网络连接（\(urlError.code.rawValue)）"
         } else {
             message = error.localizedDescription
         }
