@@ -53,13 +53,11 @@ jobs:
           files: Timetable.ipa
           name: Timetable iOS ${{ github.ref_name }}
           body: |
-            SwiftUI 原生 iOS 端（iOS 16+）。
+            SwiftUI 原生 iOS 端 v0.1.0（iOS 16+）。
 
-            本版教室显示进一步修正：房间号不再带"左/右"后缀（如"三教302"），课程详情仍保留完整教室信息。
+            功能与 Android 端一致：教务登录、今日页、周课表网格、课程详情、开学日期、同课同色配色；凭据仅存本机 Keychain。已包含下拉刷新稳定性修复与教室显示规范化（格子只显示房间号，详情保留完整信息）。
 
             **此 IPA 未包含签名**，需用以下任一方式重签后安装：
             - 爱思助手：工具箱 → IPA 签名（用你的 Apple ID，7 天有效）
             - AltStore / Sideloadly（电脑端用 Apple ID 签名，7 天有效）
             - 有付费开发者证书可用 ESign 等直接签名
-
-            功能与 Android 端一致：教务登录、今日页、周课表网格、课程详情、开学日期、同课同色配色；凭据仅存本机 Keychain。
