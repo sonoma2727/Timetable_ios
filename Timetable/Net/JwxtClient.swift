@@ -1,5 +1,4 @@
 import Foundation
-import CoreFoundation
 
 final class JwxtClient {
 
@@ -74,12 +73,7 @@ final class JwxtClient {
     }
 
     private func decode(_ data: Data) -> String {
-        if let s = String(data: data, encoding: .utf8) { return s }
-        let gb18030 = String.Encoding(
-            rawValue: CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)
-        )
-        if let s = String(data: data, encoding: gb18030) { return s }
-        return String(decoding: data, as: UTF8.self)
+        String(data: data, encoding: .utf8) ?? String(decoding: data, as: UTF8.self)
     }
 
     private func extractError(_ html: String) -> String? {
