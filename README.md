@@ -2,16 +2,6 @@
 
 SwiftUI 原生实现，功能与 Android 端一致：教务登录、今日页、周课表网格、课程详情、开学日期设置、同课同色配色、Keychain 凭据加密、免责声明与项目 README 一致。
 
-## 获取 IPA（Releases）
-
-Release 中的 `Timetable.ipa` **未包含签名**，安装前需用以下任一方式重签（均用你自己的 Apple ID，免费证书 7 天有效）：
-
-- 爱思助手：工具箱 → IPA 签名 → 选择 IPA → 用 Apple ID 签名 → 安装
-- AltStore / Sideloadly：电脑端签名安装
-- 有付费开发者证书可用 ESign 等直接签名
-
-要求 iOS 16+。
-
 ## 本地构建（macOS + Xcode 15+）
 
 工程用 [XcodeGen](https://github.com/yonaskolb/XcodeGen) 描述，首次生成工程文件：
